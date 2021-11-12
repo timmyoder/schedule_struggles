@@ -16,7 +16,7 @@ class BaseModel(pw.Model):
 
 
 class Users(BaseModel):
-    small_id = pw.AutoField()
+    roster_id = pw.IntegerField(primary_key=True)
     user_id = pw.IntegerField(unique=True)
     display_name = pw.CharField()
     team_name = pw.CharField(null=True)
@@ -40,10 +40,11 @@ class Standings(BaseModel):
 
 class Scores(BaseModel):
     user = pw.ForeignKeyField(Users,
-                              field='small_id',
+                              field='roster_id',
                               backref='scores')
     week = pw.IntegerField()
     score = pw.FloatField()
+    matchup_id = pw.IntegerField()
 
     class Meta:
         indexes = (
