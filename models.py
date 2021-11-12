@@ -52,6 +52,15 @@ class Scores(BaseModel):
         )
 
 
+class WeeklyResults(BaseModel):
+    user = pw.ForeignKeyField(Users,
+                              field='roster_id',
+                              backref='week_results')
+    week = pw.IntegerField()
+    win_loss_tie = pw.CharField()
+    total_score = pw.FloatField()
+
+
 ALL_TABLES = [Users,
               Standings,
               Scores]
