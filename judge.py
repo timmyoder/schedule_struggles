@@ -55,6 +55,38 @@ def log_result(week, match):
                 logger.debug(f'Week {week} result for {user} exists')
 
 
+def rank_teams(week):
+    results_so_far = pd.DataFrame(
+        list(WeeklyResults.select().where(WeeklyResults.week <= week).dicts()))
+
+    total_score = results_so_far.groupby('user')['total_score'].max()
+    count_wins = results_so_far.groupby(['user', 'win_loss_tie'])['id'].count()
+    count_wins = count_wins.unstack()
+
+    ranking = count_wins.join(total_score)
+    ranking = ranking.reset_index().sort_values(by=['W', 'total_score'],
+                                      ascending=False)
+    ranking.reset_index(drop=True, inplace=True)
+    ranking.reset_index(inplace=True)
+    ranking.rename(columns={'index': 'rank'}, inplace=True)
+
+    return ranking
+
+
+def record_rank(week):
+    rank = rank_teams(week)
+    rank = rank[['rank', 'user']].set_index('rank').T
+    rank.columns = [f'place_{r_+1}' for r_ in rank.columns]
+    rank['week'] = week
+    try:
+        Standings.create(**(rank.to_dict('records')[0]))
+        logger.info(f'Standings for week {week} added')
+    except pw.IntegrityError:
+        logger.debug(f'Standings for week {week} added')
+
+
 if __name__ == '__main__':
-    for wk in range(2, 10):
+    for wk in range(1, 10):
         determine_games(wk)
+        record_rank(wk)
+

@@ -63,7 +63,8 @@ class WeeklyResults(BaseModel):
 
 ALL_TABLES = [Users,
               Standings,
-              Scores]
+              Scores,
+              WeeklyResults]
 
 
 def clear_db():

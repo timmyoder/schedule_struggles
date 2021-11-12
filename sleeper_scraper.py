@@ -1,6 +1,7 @@
 import requests
 from loguru import logger
 import sleeper_wrapper as sw
+from peewee import IntegrityError
 
 from models import db, Users, Scores
 
@@ -36,25 +37,23 @@ def populate_users():
 
 
 def populate_scores(cur_wk):
-    for week in range(1, cur_wk+1):
-        for match in league.get_matchups(cur_wk):
+    for week in range(1, cur_wk + 1):
+        for match in league.get_matchups(week):
             roster_id = match['roster_id']
             score = match['points']
             matchup_id = match['matchup_id']
 
             with db.atomic():
-                score, created = Scores.get_or_create(user_id=roster_id,
-                                                      week=week,
-                                                      score=score,
-                                                      matchup_id=matchup_id)
-                if created:
-                    logger.info(f'Week {week} score added for user {roster_id}')
-                else:
+                try:
+                    Scores.create(user_id=roster_id,
+                                  week=week,
+                                  score=score,
+                                  matchup_id=matchup_id)
+                    logger.info(f'Week {week} score added for user {roster_id}, {score}, {matchup_id}')
+                except IntegrityError:
                     logger.debug(f'Week {week} score for user {roster_id} exists')
 
 
 if __name__ == '__main__':
     populate_users()
     populate_scores(cur_wk=9)
-
-
