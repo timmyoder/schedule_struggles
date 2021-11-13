@@ -65,7 +65,7 @@ def rank_teams(week):
 
     ranking = count_wins.join(total_score)
     ranking = ranking.reset_index().sort_values(by=['W', 'total_score'],
-                                      ascending=False)
+                                                ascending=False)
     ranking.reset_index(drop=True, inplace=True)
     ranking.reset_index(inplace=True)
     ranking.rename(columns={'index': 'rank'}, inplace=True)
@@ -75,14 +75,14 @@ def rank_teams(week):
 
 def record_rank(week):
     rank = rank_teams(week)
-    rank = rank[['rank', 'user']].set_index('rank').T
-    rank.columns = [f'place_{r_+1}' for r_ in rank.columns]
-    rank['week'] = week
-    try:
-        Standings.create(**(rank.to_dict('records')[0]))
-        logger.info(f'Standings for week {week} added')
-    except pw.IntegrityError:
-        logger.debug(f'Standings for week {week} added')
+    rank = rank[['rank', 'user']]
+
+    for ind, row in rank.iterrows():
+        with db.atomic():
+            user, created = Standings.get_or_create(user=row['user'])
+            setattr(user, f'week_{week}_rank', row['rank'])
+            user.save()
+            logger.info(f'Week {week} rank added for user {user}')
 
 
 if __name__ == '__main__':
@@ -90,3 +90,7 @@ if __name__ == '__main__':
         determine_games(wk)
         record_rank(wk)
 
+    r = pd.DataFrame(list(Standings.select(Standings.user,
+                                           Standings.week_9_rank).dicts()))
+    u = pd.DataFrame(list(Users.select().dicts())).set_index('roster_id')
+    ranked = r.join(u, on='user')

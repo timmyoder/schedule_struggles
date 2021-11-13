@@ -23,19 +23,23 @@ class Users(BaseModel):
 
 
 class Standings(BaseModel):
-    week = pw.IntegerField(primary_key=True)
-    place_1 = pw.IntegerField()
-    place_2 = pw.IntegerField()
-    place_3 = pw.IntegerField()
-    place_4 = pw.IntegerField()
-    place_5 = pw.IntegerField()
-    place_6 = pw.IntegerField()
-    place_7 = pw.IntegerField()
-    place_8 = pw.IntegerField()
-    place_9 = pw.IntegerField()
-    place_10 = pw.IntegerField()
-    place_11 = pw.IntegerField()
-    place_12 = pw.IntegerField()
+    user = pw.ForeignKeyField(Users,
+                              field='roster_id',
+                              backref='standings')
+    week_1_rank = pw.IntegerField(null=True)
+    week_2_rank = pw.IntegerField(null=True)
+    week_3_rank = pw.IntegerField(null=True)
+    week_4_rank = pw.IntegerField(null=True)
+    week_5_rank = pw.IntegerField(null=True)
+    week_6_rank = pw.IntegerField(null=True)
+    week_7_rank = pw.IntegerField(null=True)
+    week_8_rank = pw.IntegerField(null=True)
+    week_9_rank = pw.IntegerField(null=True)
+    week_10_rank = pw.IntegerField(null=True)
+    week_11_rank = pw.IntegerField(null=True)
+    week_12_rank = pw.IntegerField(null=True)
+    week_13_rank = pw.IntegerField(null=True)
+    week_14_rank = pw.IntegerField(null=True)
 
 
 class Scores(BaseModel):
