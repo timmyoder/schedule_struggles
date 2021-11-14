@@ -47,7 +47,7 @@ class RankAnimation(DataGrabber):
              (0.6196078431372549, 0.8549019607843137, 0.8980392156862745)]
         ))
 
-        self.ax.barh(data_to_plot['display_name'], data_to_plot['wins'],
+        self.ax.barh(data_to_plot['team_name'], data_to_plot['wins'],
                      color=[colors[name]
                             for name in data_to_plot['display_name']])
         self.ax.invert_yaxis()
