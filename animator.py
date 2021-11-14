@@ -73,7 +73,7 @@ class RankAnimation(DataGrabber):
         self.ax.margins(0, 0.01)
         self.ax.grid(which='major', axis='x', linestyle='-')
         self.ax.set_axisbelow(True)
-        self.ax.text(0, 1.12, 'Simulated Rankings',
+        self.ax.text(0, 1.12, f'{sim_or_real.capitalize()} Rankings',
                      transform=self.ax.transAxes, size=24, weight=600, ha='left')
         self.ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
         plt.box(False)
