@@ -17,6 +17,8 @@ class DataGrabber:
         self.rank = {}
         self.scores = {}
 
+        self.sim_rank = {}
+
         self.get_all_ranks(cur_week)
         self.get_all_scores(cur_week)
 
