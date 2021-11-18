@@ -54,6 +54,11 @@ def populate_scores(cur_wk):
                     logger.debug(f'Week {week} score for user {roster_id} exists')
 
 
+def main(cur_week):
+    populate_users()
+    populate_scores(cur_wk=cur_week)
+
+
 if __name__ == '__main__':
     populate_users()
     populate_scores(cur_wk=9)

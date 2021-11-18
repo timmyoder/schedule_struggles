@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 from matplotlib import animation
 import matplotlib.ticker as ticker
-from data_grabber import DataGrabber
+from simulator import Simulator
 
 
-class RankAnimation(DataGrabber):
+class RankAnimation(Simulator):
     def __init__(self, cur_week,
                  simulated_file_name='sim.gif',
                  real_file_name='real.gif'):
@@ -17,7 +17,9 @@ class RankAnimation(DataGrabber):
         if sim_or_real == 'real':
             data_to_plot = self.rank[week + 1]
         else:
-            data_to_plot = self.sim_rank[week + 1]
+            data_to_plot = self.sim_rank[week + 1].sort_values(by=['wins',
+                                                                   'total_score'],
+                                                               ascending=False)
         self.ax.clear()
 
         # tableau colors
@@ -84,9 +86,9 @@ class RankAnimation(DataGrabber):
                                            self.plot_server,
                                            fargs=('real',),
                                            frames=self.cur_week,
-                                           interval=1500,
+                                           interval=1600,
                                            repeat=True,
-                                           repeat_delay=2000)
+                                           repeat_delay=3000)
         animator.save(self.real_file, writer='imagemagick')
 
     def animate_sim(self):
@@ -94,12 +96,13 @@ class RankAnimation(DataGrabber):
                                            self.plot_server,
                                            fargs=('simulated',),
                                            frames=self.cur_week,
-                                           interval=1500,
+                                           interval=1600,
                                            repeat=True,
-                                           repeat_delay=2000)
-        animator.save(self.real_file, writer='imagemagick')
+                                           repeat_delay=3000)
+        animator.save(self.sim_file, writer='imagemagick')
 
 
 if __name__ == '__main__':
     a = RankAnimation(9)
     a.animate_real()
+    a.animate_sim()

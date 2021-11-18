@@ -85,12 +85,14 @@ def record_rank(week):
             logger.info(f'Week {week} rank added for user {user}')
 
 
+def main(cur_week):
+    for wk in range(1, cur_week + 1):
+        determine_games(wk)
+        record_rank(wk)
+
+
 if __name__ == '__main__':
     for wk in range(1, 10):
         determine_games(wk)
         record_rank(wk)
 
-    r = pd.DataFrame(list(Standings.select(Standings.user,
-                                           Standings.week_9_rank).dicts()))
-    u = pd.DataFrame(list(Users.select().dicts())).set_index('roster_id')
-    ranked = r.join(u, on='user')
