@@ -1,6 +1,6 @@
-# schedule_struggles
+# Schedule Struggles
 
-Examining the impact of schedule strength on Fantasy Football using Monte Carlo
+Examining the impact of schedule strength on Fantasy Football. It is kinder to some of than others...
 
 
 ## Real Standings
@@ -8,6 +8,6 @@ Examining the impact of schedule strength on Fantasy Football using Monte Carlo
 ![real_standings](real.gif)
 
 
-## Simple Prob Standings
+## Simple Probabiliy Standings
 
 ![sim_simple](sim.gif)
